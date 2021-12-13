@@ -1,0 +1,45 @@
+.not-found{
+    padding-top:246px;
+    padding-bottom:60px;
+    background: #FFFFFF;
+}
+
+.not-found__title{
+    margin: 0%;
+    font-family: Inter;
+font-style: normal;
+font-weight: normal;
+font-size: 140px;
+line-height: 169px;
+text-align: center;
+
+color: #000000;
+}
+.not-found__text{
+    margin: 0%;
+    display: block;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    
+    color: #000000;
+    
+}
+.not-found__button{
+    display: block;
+    margin: 0%;
+    margin-top: 184px;
+    font-family: Inter;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 17px;
+text-decoration: none;
+text-align: center;
+color: #000000;
+
+
+}
