@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../Header";
 import SearchForm from "./SearchForm";
 import MoviesCard from "./MoviesCard";
@@ -7,11 +7,18 @@ import BurgerMenu from "./BurgerMenu";
 
 import "./Movies.css";
 
-function Movies(props) {
+function Movies() {
+  const [isBurgerOpen, setIsBurgerOpen] = useState(false);
+  const handleBurgerMenu = () => {
+    setIsBurgerOpen(true);
+  };
+  const closeBurger = () => {
+    setIsBurgerOpen(false);
+  };
   return (
     <>
-      <BurgerMenu isOpen={true}></BurgerMenu>
-      <Header isMain={false} />
+      <BurgerMenu isOpen={isBurgerOpen} closeBurger={closeBurger}></BurgerMenu>
+      <Header isMain={false} burgerMenu={handleBurgerMenu} />
       <SearchForm></SearchForm>
       <div className="movies">
         <MoviesCard></MoviesCard>

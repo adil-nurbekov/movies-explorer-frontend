@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Profile.css";
 import Header from "./Header";
 import { Link } from "react-router-dom";
+import BurgerMenu from "./movies/BurgerMenu";
 
 function Profile() {
+  const [isBurgerOpen, setIsBurgerOpen] = useState(false);
+  const handleBurgerMenu = () => {
+    setIsBurgerOpen(true);
+  };
+  const closeBurger = () => {
+    setIsBurgerOpen(false);
+  };
   return (
     <>
-      <Header></Header>
+      <BurgerMenu isOpen={isBurgerOpen} closeBurger={closeBurger}></BurgerMenu>
+      <Header burgerMenu={handleBurgerMenu}></Header>
       <div className="profile">
         <div className="profile__wrapper">
           <div className="profile__header">Привет, Виталий!</div>
