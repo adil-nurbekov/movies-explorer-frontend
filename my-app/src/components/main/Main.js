@@ -9,11 +9,11 @@ import Header from "../Header";
 import Footer from "../Footer";
 import Portfolio from "./Portfolio";
 
-function Main() {
+function Main(props) {
   return (
     <>
-      <Header />
-      <section className="main">
+      <Header isMain={true} con={props.menu} />
+      <main className="main">
         <div className="main__content-wrapper">
           <div className="main__text-wrapper">
             <h1 className="main__header">
@@ -38,7 +38,7 @@ function Main() {
         <Tech></Tech>
         <AboutMe></AboutMe>
         <Portfolio></Portfolio>
-      </section>
+      </main>
       <Footer />
     </>
   );

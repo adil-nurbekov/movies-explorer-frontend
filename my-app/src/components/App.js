@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Footer from "./Footer";
@@ -15,11 +15,12 @@ import BurgerMenu from "./movies/BurgerMenu";
 import Preloader from "./Preloader";
 
 function App() {
+  const [burgerOpen, setBurgerOpen] = useState(true);
+
   return (
     <div>
       <Routes>
         <Route path="/pre" element={<Preloader />}></Route>
-        <Route path="/burger" element={<BurgerMenu />}></Route>
         <Route path="/" element={<Main />}></Route>
         <Route path="/signup" element={<Register />}></Route>
         <Route path="/signin" element={<Login />}></Route>

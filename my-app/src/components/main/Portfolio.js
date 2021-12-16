@@ -6,11 +6,19 @@ function Portfolio() {
     <>
       <section className="portfolio">
         <h3 className="portfolio-header">Портфолио</h3>
-        <div className="portfolio-app-wrapper">
+        <a
+          className="portfolio-app-wrapper"
+          href="http://nurbekov.nomoredomains.work/"
+          target="_blank"
+        >
           <p className="portfolio-app-name">Статичный сайт</p>
           <img className="portfolio-app-arrow" src={arrow} alt="стрелка"></img>
-        </div>
-        <div className="portfolio-app-wrapper">
+        </a>
+        <a
+          className="portfolio-app-wrapper"
+          href="http://nurbekov.nomoredomains.work/"
+          target="_blank"
+        >
           <p className="portfolio-app-name">Адаптивный сайт</p>
           <img
             className="portfolio-app-arrow"
@@ -18,11 +26,15 @@ function Portfolio() {
             alt="стрелка"
             м
           ></img>
-        </div>
-        <div className="portfolio-app-wrapper">
+        </a>
+        <a
+          className="portfolio-app-wrapper"
+          href="http://nurbekov.nomoredomains.work/"
+          target="_blank"
+        >
           <p className="portfolio-app-name">Одностраничное приложение</p>
           <img className="portfolio-app-arrow" src={arrow} alt="стрелка"></img>
-        </div>
+        </a>
       </section>
     </>
   );

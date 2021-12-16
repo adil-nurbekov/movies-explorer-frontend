@@ -16,7 +16,7 @@ function Login({ onRegister }) {
   return (
     <section className="login">
       <div className="login__wrapper">
-        <img className="login__logo" src={regLogo}></img>
+        <img className="login__logo" src={regLogo} alt="logo"></img>
         <h1 className="login__header">Рады видеть!</h1>
         <form className="login__form" onSubmit={handleSubmitButton}>
           <p className="login__label">E-mail</p>

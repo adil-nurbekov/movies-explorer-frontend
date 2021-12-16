@@ -17,7 +17,7 @@
     margin: auto;
     padding-top: 79px;
 text-align: center;
-font-family: Inter;
+font-family: Inter, Arial, Helvetica, sans-serif;
 font-style: normal;
 font-weight: normal;
 font-size: 13px;
@@ -26,7 +26,7 @@ color: #A0A0A0;
 }
 .footer__date{
     margin: 0%;
-    font-family: Inter;
+    font-family: Inter, Arial, Helvetica, sans-serif;
 font-style: normal;
 font-weight: normal;
 font-size: 13px;
@@ -46,6 +46,11 @@ font-size: 13px;
 line-height: 16px;
 color: #000000;
 padding-right: 20px;
+text-decoration: none;
+transition: all 0.5s ease-in-out;
+}
+.footer__links:hover{
+    color: #f3c1f8;
 }
 .footer__links:last-child{
     padding-right: 0;

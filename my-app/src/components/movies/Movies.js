@@ -7,15 +7,13 @@ import BurgerMenu from "./BurgerMenu";
 
 import "./Movies.css";
 
-function Movies() {
+function Movies(props) {
   return (
     <>
-      {" "}
-      <Header></Header>
+      <BurgerMenu isOpen={true}></BurgerMenu>
+      <Header isMain={false} />
       <SearchForm></SearchForm>
       <div className="movies">
-        <BurgerMenu></BurgerMenu>
-
         <MoviesCard></MoviesCard>
         <MoviesCard></MoviesCard>
         <MoviesCard></MoviesCard>
@@ -24,6 +22,7 @@ function Movies() {
         <MoviesCard></MoviesCard>
         <MoviesCard></MoviesCard>
         <MoviesCard></MoviesCard>
+        <button className="movies__else">Еще</button>
       </div>
       <Footer></Footer>
     </>

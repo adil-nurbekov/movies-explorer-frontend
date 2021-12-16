@@ -19,12 +19,21 @@ function AboutMe() {
             заниматься фриланс-заказами и ушёл с постоянной работы.
           </p>
           <ul className="about__student-links">
-            <Link to="" className="about__student-link">
+            <a
+              className="about__student-link"
+              href="https://facebook.com"
+              target="_blank"
+            >
               Facebook
-            </Link>
-            <Link to="" className="about__student-link">
+            </a>
+            <a
+              to=""
+              className="about__student-link"
+              href="https://github.com/adil-nurdekov"
+              target="_blank"
+            >
               Github
-            </Link>
+            </a>
           </ul>
         </div>
         <div className="about__student-image-wrapper">

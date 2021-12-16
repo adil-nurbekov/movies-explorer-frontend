@@ -1,59 +1,63 @@
-.portfolio{
-    background: #FFFFFF;
-    margin: 0px;
-    padding:110px 70px;
+.portfolio {
+  background: #ffffff;
+  margin: 0px;
+  padding: 110px 70px;
 }
 
-.portfolio-header{
-    margin: 0%;
-    font-family: Inter;
-font-style: normal;
-font-weight: normal;
-font-size: 18px;
-line-height: 20px;
-color: #A0A0A0;
-mix-blend-mode: normal;
+.portfolio-header {
+  margin: 0%;
+  padding-bottom: 50px;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 20px;
+  color: #a0a0a0;
+  mix-blend-mode: normal;
+}
+.portfolio-app-wrapper {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: solid 1px;
+  border-color: #e6e6e6;
+  text-decoration: none;
 
 }
-.portfolio-app-wrapper{
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: solid 1px;
-    border-color: #E6E6E6;
+.portfolio-app-wrapper:hover .portfolio-app-name {
+  color: #f3c1f8;
 }
-.portfolio-app-name{
-    margin:0;
-    font-family: Inter;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 30px;
-    line-height: 50px;
+.portfolio-app-name {
+  margin: 0;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 50px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  transition: all 0.5s ease-in-out;
+}
+.portfolio-app-wrapper:last-child {
+  margin-bottom: 0px;
+}
+@media (max-width: 440px) {
+  .portfolio {
+    padding: 0px 14px 70px;
+  }
+  .portfolio-header {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 40px;
+  }
+  .portfolio-app-name {
+    font-size: 18px;
+    line-height: 28px;
+    /* identical to box height, or 156% */
+
     letter-spacing: -0.04em;
-    color: #000000;
-}
-.portfolio-app-wrapper:last-child{
-    margin-bottom: 0px;
-}
-@media (max-width:440px) {
-    .portfolio{
-        padding:0px 14px 70px ;
-    }
-    .portfolio-header{
-        font-size: 14px;
-        line-height: 20px;
-        margin-bottom: 40px;
-    
-    }
-    .portfolio-app-name{
-        font-size: 18px;
-        line-height: 28px;
-        /* identical to box height, or 156% */
-        
-        letter-spacing: -0.04em;
-        padding-bottom: 19px;
-    }
-    .portfolio-app-arrow{
-
-    }
+    padding-bottom: 19px;
+  }
+  .portfolio-app-arrow {
+  }
 }

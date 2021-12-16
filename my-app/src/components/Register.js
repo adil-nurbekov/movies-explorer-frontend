@@ -17,7 +17,7 @@ function Register({ onRegister }) {
   return (
     <section className="registration">
       <div className="registration__wrapper">
-        <img className="registration__logo" src={regLogo}></img>
+        <img className="registration__logo" src={regLogo} alt="лого"></img>
         <h1 className="registration__header">Добро пожаловать!</h1>
         <form className="registration__form" onSubmit={handleSubmitButton}>
           <p className="registration__label">Имя</p>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 function Footer() {
@@ -13,9 +14,27 @@ function Footer() {
           &copy; {new Date().getFullYear()} Adil Nurbekov
         </p>
         <div className="footer__links-wrapper">
-          <p className="footer__links">Яндекс.Практикум</p>
-          <p className="footer__links">Gitgub</p>
-          <p className="footer__links">Facebook</p>
+          <a
+            className="footer__links"
+            href="https://practicum.yandex.ru/"
+            target="_blank"
+          >
+            Яндекс.Практикум
+          </a>
+          <a
+            className="footer__links"
+            href="https://github.com"
+            target="_blank"
+          >
+            Gitgub
+          </a>
+          <a
+            className="footer__links"
+            href="https://facebook.com"
+            target="_blank"
+          >
+            Facebook
+          </a>
         </div>
       </div>
     </footer>
