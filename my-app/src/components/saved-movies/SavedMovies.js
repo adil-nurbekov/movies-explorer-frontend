@@ -7,18 +7,10 @@ import BurgerMenu from "../movies/BurgerMenu";
 
 import "./SavedMovies.css";
 
-function SavedMovies() {
-  const [isBurgerOpen, setIsBurgerOpen] = useState(false);
-  const handleBurgerMenu = () => {
-    setIsBurgerOpen(true);
-  };
-  const closeBurger = () => {
-    setIsBurgerOpen(false);
-  };
+function SavedMovies(props) {
   return (
     <>
-      <BurgerMenu isOpen={isBurgerOpen} closeBurger={closeBurger}></BurgerMenu>
-      <Header isMain={false} burgerMenu={handleBurgerMenu} />
+      <Header isMain={false} burgerMenu={props.handleBurgerMenu} />
       <SearchForm></SearchForm>
       <div className="saved">
         <SavedMoviesCard></SavedMoviesCard>

@@ -47,8 +47,9 @@
   display: block;
 }
 .saved-card__img-wrapper {
-  width: 220px;
-  height: 122px;
+  width:100%;
+  max-width: 220px;
+  max-height: 122px;
 }
 .saved-card__img {
   width: 100%;
@@ -59,9 +60,13 @@
     flex-direction: column-reverse;
     align-items: flex-start;
   }
+  .saved-card__img {
+    max-width: 440px;
+  max-height: 168px;
+  }
   .saved-card__img-wrapper {
-    width: 300px;
-    height: 168px;
+    max-width: 440px;
+  max-height: 168px;
   }
   .saved-card__info {
     padding: 0%;

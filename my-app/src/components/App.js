@@ -15,7 +15,13 @@ import BurgerMenu from "./movies/BurgerMenu";
 import Preloader from "./Preloader";
 
 function App() {
-  const [burgerOpen, setBurgerOpen] = useState(true);
+  const [isBurgerOpen, setIsBurgerOpen] = useState(false);
+  const closeBurger = () => {
+    setIsBurgerOpen(false);
+  };
+  const handleBurgerMenu = () => {
+    setIsBurgerOpen(true);
+  };
 
   return (
     <div>
@@ -24,11 +30,21 @@ function App() {
         <Route path="/" element={<Main />}></Route>
         <Route path="/signup" element={<Register />}></Route>
         <Route path="/signin" element={<Login />}></Route>
-        <Route path="saved-movies" element={<SavedMovies />}></Route>
-        <Route path="/movies" element={<Movies></Movies>}></Route>
-        <Route path="/profile" element={<Profile />}></Route>
+        <Route
+          path="saved-movies"
+          element={<SavedMovies handleBurgerMenu={handleBurgerMenu} />}
+        ></Route>
+        <Route
+          path="/movies"
+          element={<Movies handleBurgerMenu={handleBurgerMenu} />}
+        ></Route>
+        <Route
+          path="/profile"
+          element={<Profile handleBurgerMenu={handleBurgerMenu} />}
+        ></Route>
         <Route path="*" element={<PageNotFound />}></Route>
       </Routes>
+      <BurgerMenu isOpen={isBurgerOpen} closeBurger={closeBurger}></BurgerMenu>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import closeButton from "../../images/close.jpg";
 function BurgerMenu(props) {
   return (
     <>
-      <div className={props.isOpen ? "burger-menu" : "burger"}>
+      <div className={props.isOpen ? "burger-menu burger" : "burger-menu"}>
         <img
           src={closeButton}
           className="burger-menu__close"

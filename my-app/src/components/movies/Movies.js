@@ -7,18 +7,10 @@ import BurgerMenu from "./BurgerMenu";
 
 import "./Movies.css";
 
-function Movies() {
-  const [isBurgerOpen, setIsBurgerOpen] = useState(false);
-  const handleBurgerMenu = () => {
-    setIsBurgerOpen(true);
-  };
-  const closeBurger = () => {
-    setIsBurgerOpen(false);
-  };
+function Movies(props) {
   return (
     <>
-      <BurgerMenu isOpen={isBurgerOpen} closeBurger={closeBurger}></BurgerMenu>
-      <Header isMain={false} burgerMenu={handleBurgerMenu} />
+      <Header isMain={false} burgerMenu={props.handleBurgerMenu} />
       <SearchForm></SearchForm>
       <div className="movies">
         <MoviesCard></MoviesCard>
