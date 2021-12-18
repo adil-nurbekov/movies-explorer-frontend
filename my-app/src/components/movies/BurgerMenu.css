@@ -1,0 +1,77 @@
+
+.burger-menu{
+
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: flex-end;
+  transition: visibility 0s, opacity 0.5s linear;
+  visibility:hidden;
+  opacity:0;
+}
+.burger {
+  visibility:visible;
+  opacity:1;
+}
+.burger-menu__content{
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  width:67%;
+  align-items: center;
+overflow:scroll
+}
+.burger-menu__close{
+  position:absolute;
+  top: 22px;
+  right: 22px
+}
+.burger-menu__content__list{
+  margin-bottom: 28px;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  text-decoration: none;
+  color: #000000;
+  }
+.burger-menu__content__list:first-of-type{
+  margin-top: 159px
+  }
+  .burger-menu__account {
+    margin-top:621px;
+    margin-bottom: 90px;
+    box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
+    border-radius: 40px;
+    width:100px;
+display: flex;
+align-items: center;
+justify-content: space-evenly
+  }
+  .burger-menu__content__account {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 12px;
+    text-decoration: none;
+    color: #000000;
+
+
+
+  }
+  .burger-menu__content__account-img {
+    border-radius: 50%;
+    padding: 7.5px;
+    background: #F9F9F9;
+
+
+  }
+  .active {
+    border-bottom: 2px solid #000000;
+  }

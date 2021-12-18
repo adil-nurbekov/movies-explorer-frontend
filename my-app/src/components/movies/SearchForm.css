@@ -1,0 +1,123 @@
+.search {
+  background: #ffffff;
+  padding: 70px;
+}
+.search__form {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  background: #fdfdfd;
+  box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
+  border-radius: 9px;
+  position: relative;
+  margin-bottom: 69px;
+}
+.search__border {
+  width: 100%;
+  height: 1px;
+  background: #e8e8e8;
+}
+.search__input {
+  border: none;
+  width: 71%;
+  padding-left: 16px;
+}
+.search__loop {
+  padding-left: 25px;
+}
+.search__button {
+  border: none;
+  width: 70px;
+  height: 34px;
+  background: #000000;
+  border-radius: 48px;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+}
+.search__divader {
+  margin-left: 19px;
+  margin-right: 19px;
+  width: 1px;
+  height: 40px;
+  background: #cbcbcb;
+}
+.search__checkbox-wrapper {
+  display: flex;
+  align-items: center;
+}
+.search__checkbox {
+  margin-right: 14px;
+  margin: 0%;
+  position: relative;
+  width: 34px;
+  height: 14px;
+  -webkit-appearance: none;
+  outline: none;
+  background: #ebebeb;
+  border-radius: 20px;
+  transition: 0.5sec;
+  cursor: pointer;
+
+}
+.search__checkbox:checked {
+  background: #2be080;
+}
+.search__checkbox::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 20px;
+  top: 2px;
+  left: 2px;
+  background: #F5F5F5;
+  transition: 0.5s;
+  transform: scale(0.9);
+}
+.search__checkbox:checked:before {
+  left: 65%;
+}
+.search__text {
+  display: block;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 18px;
+  color: #000000;
+  padding-right: 30px;
+  padding-left: 15px;
+}
+@media (max-width: 768px) {
+  .search {
+    padding: 80px 30px 110px;
+  }
+}
+@media (max-width: 485px) {
+  .search {
+    padding: 80px 10px 10px;
+    position: relative;
+  }
+  .search__loop {
+    display: none;
+  }
+  .search__divader {
+    display: none;
+  }
+  .search__checkbox-wrapper {
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%);
+  }
+  .search__border {
+    margin-top: 109px;
+  }
+}

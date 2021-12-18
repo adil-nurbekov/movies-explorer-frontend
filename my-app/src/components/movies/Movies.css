@@ -1,0 +1,43 @@
+.movies{
+    background: #FFFFFF;
+    padding-left: 70px;
+    padding-right: 70px;
+    padding-bottom: 80px;
+}
+.movies__else{
+    width: 100%;
+    max-width: 320px;
+    height:36px;
+    margin: 0 auto;
+    background: #F9F9F9;
+border-radius: 6px;
+border: none;
+font-family: Inter, Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 15px;
+display: flex;
+align-items: center;
+text-align: center;
+justify-content:center;
+color: #000000;
+cursor: pointer;
+}
+@media (max-width: 768px){
+    .movies{
+        padding-left:30px;
+        padding-right:30px
+    }
+}
+@media (max-width: 768px){
+    .movies{
+        padding-left:10px;
+        padding-right:10px
+    }
+}
+@media (max-width: 440px){
+    .movies__else{
+ max-width: 240px;
+    }
+}
