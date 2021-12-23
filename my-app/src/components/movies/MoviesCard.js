@@ -1,28 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import "./MoviesCard.css";
-import activeLike from "../../images/activeLike.svg";
-import movie from "../../images/movie.jpg";
+import { SavedMoviesContext } from "../../context/SavedMoviesContext";
 
-function MoviesCard() {
-  const [liked, setLiked] = useState(true);
+function MoviesCard(props) {
+  const isLiked = React.useContext(SavedMoviesContext).some(
+    (i) => i.movieId === props.card.movieId
+  );
+
   const handleLikeButton = () => {
-    setLiked(!liked);
+    if (isLiked) {
+      return props.deleteMovie(props.card);
+    }
+    props.saveMovie(props.card);
   };
+
   return (
     <div className="card">
       <div className="card__info">
-        <h3 className="card__info_header">33 слова о дизайне</h3>
-        <span className="card__info_dur"> 1ч 42м</span>
+        <h3 className="card__info_header">{props.name}</h3>
+        <span className="card__info_dur">{props.duration}</span>
         <button
-          className={liked ? "card__info_like" : "card__info_like_active"}
+          className={isLiked ? "card__info_like_active" : "card__info_like"}
           onClick={handleLikeButton}
         ></button>
       </div>
       <div className="card__img-wrapper">
-        {" "}
-        <div className="card__img-wrapper">
-          <img className="card__img" src={movie} alt="фото фильма"></img>
-        </div>
+        <img className="card__img" src={props.image} alt="фото фильма"></img>
       </div>
     </div>
   );

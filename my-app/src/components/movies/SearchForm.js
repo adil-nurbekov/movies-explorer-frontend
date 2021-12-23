@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import loop from "../../images/loop.svg";
 import "./SearchForm.css";
 
-function SearchForm() {
+function SearchForm(props) {
+  const [input, setInput] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    props.onSubmit(input);
+  };
+
   return (
     <div className="search">
-      <form className="search__form">
-        <img className="search__loop" src={loop}></img>
+      <form className="search__form" onSubmit={handleSubmit}>
+        <img className="search__loop" src={loop} alt="лупа"></img>
         <input
           className="search__input"
           type="search"
           placeholder="Фильмы"
           required
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value);
+          }}
         ></input>
         <button className="search__button" type="submit">
           {" "}

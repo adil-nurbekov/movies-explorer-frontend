@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Register.css";
-import regLogo from "../images/headerLogo.svg";
 
-function Register({ onRegister }) {
+function Register(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
   const handleSubmitButton = (e) => {
     e.preventDefault();
-    const userData = { email, password, name };
-    onRegister(userData);
+    props.onRegister(email, password, name);
   };
 
   return (
     <section className="registration">
       <div className="registration__wrapper">
-        <img className="registration__logo" src={regLogo} alt="лого"></img>
+        <Link to="/" className="registration__logo"></Link>
         <h1 className="registration__header">Добро пожаловать!</h1>
         <form className="registration__form" onSubmit={handleSubmitButton}>
           <p className="registration__label">Имя</p>
