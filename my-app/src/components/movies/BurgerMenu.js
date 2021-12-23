@@ -11,6 +11,7 @@ function BurgerMenu(props) {
         <img
           src={closeButton}
           className="burger-menu__close"
+          alt="закрыть"
           onClick={props.closeBurger}
         ></img>
         <div className="burger-menu__content">

@@ -1,7 +1,6 @@
 import React from "react";
 import "./AboutMe.css";
 import studentImage from "../../images/studentImage.jpg";
-import { Link } from "react-router-dom";
 
 function AboutMe() {
   return (
@@ -23,6 +22,7 @@ function AboutMe() {
               className="about__student-link"
               href="https://facebook.com"
               target="_blank"
+              rel="noreferrer"
             >
               Facebook
             </a>
@@ -31,6 +31,7 @@ function AboutMe() {
               className="about__student-link"
               href="https://github.com/adil-nurdekov"
               target="_blank"
+              rel="noreferrer"
             >
               Github
             </a>

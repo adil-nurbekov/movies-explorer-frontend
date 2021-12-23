@@ -10,6 +10,7 @@ function Portfolio() {
           className="portfolio-app-wrapper"
           href="http://nurbekov.nomoredomains.work/"
           target="_blank"
+          rel="noreferrer"
         >
           <p className="portfolio-app-name">Статичный сайт</p>
           <img className="portfolio-app-arrow" src={arrow} alt="стрелка"></img>
@@ -18,6 +19,7 @@ function Portfolio() {
           className="portfolio-app-wrapper"
           href="http://nurbekov.nomoredomains.work/"
           target="_blank"
+          rel="noreferrer"
         >
           <p className="portfolio-app-name">Адаптивный сайт</p>
           <img
@@ -31,6 +33,7 @@ function Portfolio() {
           className="portfolio-app-wrapper"
           href="http://nurbekov.nomoredomains.work/"
           target="_blank"
+          rel="noreferrer"
         >
           <p className="portfolio-app-name">Одностраничное приложение</p>
           <img className="portfolio-app-arrow" src={arrow} alt="стрелка"></img>

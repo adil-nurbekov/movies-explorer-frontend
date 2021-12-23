@@ -1,22 +1,19 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Login.css";
-import regLogo from "../images/headerLogo.svg";
 
-function Login({ onRegister }) {
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const handleSubmitButton = (e) => {
     e.preventDefault();
-    const userData = { email, password };
-    onRegister(userData);
+    props.onLogin(email, password);
   };
 
   return (
     <section className="login">
       <div className="login__wrapper">
-        <img className="login__logo" src={regLogo} alt="logo"></img>
+        <Link to="/" className="login__logo"></Link>
         <h1 className="login__header">Рады видеть!</h1>
         <form className="login__form" onSubmit={handleSubmitButton}>
           <p className="login__label">E-mail</p>

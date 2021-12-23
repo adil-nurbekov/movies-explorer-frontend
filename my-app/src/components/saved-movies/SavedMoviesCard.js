@@ -1,24 +1,28 @@
 import React from "react";
 import "./SavedMoviesCard.css";
-import activeLike from "../../images/cross.svg";
-import movie from "../../images/movie.jpg";
 
-function SavedMoviesCard() {
+function SavedMoviesCard(props) {
+  const deleteCard = () => {
+    props.deleteCard(props.card);
+  };
   return (
     <>
       <div className="saved-card">
         <div className="saved-card__info">
-          <h3 className="saved-card__info_header">33 слова о дизайне</h3>
-          <span className="saved-card__info_dur"> 1ч 42м</span>
-          <img
-            className="saved-card__info_like"
-            src={activeLike}
-            alt="лого лайка"
-          ></img>
+          <h3 className="saved-card__info_header">{props.name}</h3>
+          <span className="saved-card__info_dur">{props.duration}</span>
+          <button
+            className="saved-card__info-delete"
+            onClick={deleteCard}
+          ></button>
         </div>
         <div className="saved-card__img-wrapper">
           {" "}
-          <img className="saved-card__img" src={movie} alt="фото фильма"></img>
+          <img
+            className="saved-card__img"
+            src={props.image}
+            alt="фото фильма"
+          ></img>
         </div>
       </div>
     </>

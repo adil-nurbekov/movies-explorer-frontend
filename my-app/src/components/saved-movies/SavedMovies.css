@@ -3,15 +3,31 @@
     padding-left: 70px;
     padding-right: 70px;
 }
+.saved__empty{
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 25px;
+    line-height: 13px;
+}
 @media (max-width: 768px){
     .saved{
         padding-left: 30px;
         padding-right: 30px
+    }
+    .saved__empty{
+        font-size: 17px;
     }
 }
 @media (max-width: 440px){
     .saved{
         padding-left: 10px;
         padding-right: 10px
+    }
+    .saved__empty{
+        font-size: 12px;
     }
 }
