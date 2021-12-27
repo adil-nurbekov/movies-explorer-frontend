@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Login.css";
 
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+
+  const [emailIsValid, setEmailIsValid] = useState(false);
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const handleSubmitButton = (e) => {
     e.preventDefault();
     props.onLogin(email, password);
   };
+
+  useEffect(() => {
+    setIsFormValid(emailIsValid && passwordIsValid);
+  });
 
   return (
     <section className="login">
@@ -27,11 +38,14 @@ function Login(props) {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
+              setErrorEmail(e.target.validationMessage);
+              setEmailIsValid(e.target.checkValidity());
             }}
           ></input>
+          <span className="c">{errorEmail}</span>
           <p className="login__label">Пароль</p>
           <input
-            minLength="2"
+            minLength="5"
             maxLength="40"
             required
             className="login__text"
@@ -40,11 +54,20 @@ function Login(props) {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
+              setErrorPassword(e.target.validationMessage);
+              setPasswordIsValid(e.target.checkValidity());
             }}
           ></input>
-          <button className="login__button" type="submit">
+          <span className="login__error">{errorPassword}</span>
+
+          <button
+            className={isFormValid ? "login__button" : "login__button_disabled"}
+            type="submit"
+            disabled={!isFormValid}
+          >
             Войти
           </button>
+          <span className="login__message">{props.statusText}</span>
         </form>
         <div className="login__signup">
           <p className="login__text">

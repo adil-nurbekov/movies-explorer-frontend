@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import loop from "../../images/loop.svg";
 import "./SearchForm.css";
 
@@ -9,6 +9,9 @@ function SearchForm(props) {
     e.preventDefault();
     props.onSubmit(input);
   };
+  // useEffect(() => {
+  //   setInput(input);
+  // }, [input]);
 
   return (
     <div className="search">
@@ -30,7 +33,11 @@ function SearchForm(props) {
         </button>
         <div className="search__divader"></div>
         <div className="search__checkbox-wrapper">
-          <input className="search__checkbox" type="checkbox"></input>
+          <input
+            className="search__checkbox"
+            type="checkbox"
+            onChange={props.checked}
+          ></input>
           <p className="search__text">Короткометражки</p>
         </div>
       </form>

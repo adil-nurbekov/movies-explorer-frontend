@@ -25,7 +25,7 @@ function SavedMovies(props) {
   return (
     <>
       <Header isMain={false} burgerMenu={props.handleBurgerMenu} />
-      <SearchForm onSubmit={onSubmit}></SearchForm>
+      <SearchForm onSubmit={onSubmit} checked={props.checked}></SearchForm>
       <div className="saved">
         {saved.length === 0 ? (
           <div className="saved__empty">

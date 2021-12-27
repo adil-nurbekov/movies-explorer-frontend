@@ -7,17 +7,18 @@ const checkResponseStatus = (res) => {
 };
 //
 
-const SERVER_URL = "http://api.kinopokaz.nomoredomains.work";
+const SERVER_URL = "https://api.kinopokaz.nomoredomains.work";
+// const SERVER_URL = "http://localhost:5000";
 
 // REGISTARATION METHOD
-export const registr = (email, password, name) => {
+export const registr = (name, email, password) => {
   return fetch(`${SERVER_URL}/signup`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password, name }),
+    body: JSON.stringify({ name, email, password }),
   }).then((res) => checkResponseStatus(res));
 };
 //

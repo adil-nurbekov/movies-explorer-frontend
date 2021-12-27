@@ -36,6 +36,17 @@
 .login__logo:hover{
   transform: rotate(360deg)
 }
+.login__message{
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #0e0d0d;
+}
 .login__button {
   margin-top: 152px;
   padding-bottom: 14px;
@@ -51,6 +62,20 @@
   background-color: #000000;
   cursor: pointer;
 }
+.login__button_disabled{
+  margin-top: 152px;
+  padding-bottom: 14px;
+  padding-top: 14px;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: rgb(90, 86, 86);
+  border-radius: 3px;
+  background-color: rgb(202, 198, 198)
+}
 .login__text {
   margin-bottom: 24px;
   font-family: Inter, Arial, Helvetica, sans-serif;
@@ -64,6 +89,9 @@
   border: none;
   border-bottom: solid 1px;
   border-color: #e8e8e8;
+}
+.login__error{
+  color: red
 }
 .login__text:last-of-type {
   margin-bottom: 0%;

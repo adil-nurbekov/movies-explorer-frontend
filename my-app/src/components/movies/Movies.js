@@ -22,14 +22,6 @@ function Movies(props) {
     props.deleteMovie(card);
   };
 
-  // const [input, setInput] = useState([]);
-
-  // useEffect(() => {
-  //   MovieApi.getAllMovies().then((movies) => {
-  //     setMovie(movies);
-  //   });
-  // }, []);
-
   const duration = (num) => {
     const hours = Math.floor(num / 60);
     const minutes = Math.floor(num - hours * 60);
@@ -40,9 +32,10 @@ function Movies(props) {
   return (
     <>
       <Header isMain={false} burgerMenu={props.handleBurgerMenu} />
-      <SearchForm onSubmit={onSubmit}></SearchForm>
+      <SearchForm onSubmit={onSubmit} checked={props.checked}></SearchForm>
 
       <div className="movies">
+        <span className="movies__text">{props.movieText}</span>
         <Preloader loading={props.loading}></Preloader>
         {movies.slice(0, 7).map((card) => {
           return (
@@ -59,7 +52,12 @@ function Movies(props) {
           );
         })}
 
-        <button className="movies__else">Еще</button>
+        <button
+          className={props.isActive ? "movies__else" : "movies__else_dis"}
+          onClick={props.loadMore}
+        >
+          Еще
+        </button>
       </div>
       <Footer></Footer>
     </>
