@@ -19,7 +19,7 @@ function Login(props) {
 
   useEffect(() => {
     setIsFormValid(emailIsValid && passwordIsValid);
-  });
+  }, [emailIsValid, passwordIsValid]);
 
   return (
     <section className="login">
@@ -35,7 +35,8 @@ function Login(props) {
             className="login__text"
             id="user-email"
             type="email"
-            value={email}
+            value={email || ""}
+            pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
             onChange={(e) => {
               setEmail(e.target.value);
               setErrorEmail(e.target.validationMessage);
@@ -51,7 +52,7 @@ function Login(props) {
             className="login__text"
             id="user-password"
             type="password"
-            value={password}
+            value={password || ""}
             onChange={(e) => {
               setPassword(e.target.value);
               setErrorPassword(e.target.validationMessage);

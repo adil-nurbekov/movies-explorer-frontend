@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header";
 import SearchForm from "./SearchForm";
 import MoviesCard from "./MoviesCard";
@@ -10,9 +10,23 @@ import "./Movies.css";
 
 function Movies(props) {
   const movies = React.useContext(AllMovies);
+  const [count, setCount] = useState(7);
+  const [more, setMore] = useState(0);
+  const [isActive, setIsActive] = useState(false);
 
-  const onSubmit = (input) => {
-    props.findMovies(input);
+  const loadMore = () => {
+    setMore(more + count);
+    console.log(more);
+    if (movies.length < more + count) {
+      setIsActive(false);
+    }
+  };
+
+  const onSubmit = (checked) => {
+    props.findMovies(checked);
+    if (movies.length > 0) {
+      setIsActive(true);
+    }
   };
 
   const saveMovie = (card) => {
@@ -31,13 +45,13 @@ function Movies(props) {
   };
   return (
     <>
-      <Header isMain={false} burgerMenu={props.handleBurgerMenu} />
-      <SearchForm onSubmit={onSubmit} checked={props.checked}></SearchForm>
+      <Header isLogedIn={props.isLogedIn} burgerMenu={props.handleBurgerMenu} />
+      <SearchForm onSubmit={onSubmit}></SearchForm>
 
       <div className="movies">
         <span className="movies__text">{props.movieText}</span>
         <Preloader loading={props.loading}></Preloader>
-        {movies.slice(0, 7).map((card) => {
+        {movies.slice(0, count + more).map((card) => {
           return (
             <MoviesCard
               card={card}
@@ -48,13 +62,14 @@ function Movies(props) {
               saveMovie={saveMovie}
               deleteMovie={deleteMovie}
               loading={props.loading}
+              trailer={card.trailer}
             ></MoviesCard>
           );
         })}
 
         <button
-          className={props.isActive ? "movies__else" : "movies__else_dis"}
-          onClick={props.loadMore}
+          className={isActive ? "movies__else" : "movies__else_dis"}
+          onClick={loadMore}
         >
           Еще
         </button>

@@ -4,14 +4,23 @@ import "./SearchForm.css";
 
 function SearchForm(props) {
   const [input, setInput] = useState("");
+  const [checked, setChecked] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onSubmit(input);
+    localStorage.setItem("input", input);
+    props.onSubmit(checked);
   };
-  // useEffect(() => {
-  //   setInput(input);
-  // }, [input]);
+
+  const handleCheck = () => {
+    setChecked(!checked);
+    localStorage.setItem("checked", checked);
+  };
+
+  useEffect(() => {
+    setInput(localStorage.getItem("input"));
+    setChecked(localStorage.getItem("checked"));
+  }, [checked]);
 
   return (
     <div className="search">
@@ -22,7 +31,7 @@ function SearchForm(props) {
           type="search"
           placeholder="Фильмы"
           required
-          value={input}
+          value={input || ""}
           onChange={(e) => {
             setInput(e.target.value);
           }}
@@ -36,7 +45,8 @@ function SearchForm(props) {
           <input
             className="search__checkbox"
             type="checkbox"
-            onChange={props.checked}
+            checked={checked}
+            onChange={handleCheck}
           ></input>
           <p className="search__text">Короткометражки</p>
         </div>

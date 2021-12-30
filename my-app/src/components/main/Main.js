@@ -12,7 +12,7 @@ import Portfolio from "./Portfolio";
 function Main(props) {
   return (
     <>
-      <Header isMain={true} con={props.menu} />
+      <Header isLogedIn={props.isLogedIn} burgerMenu={props.handleBurgerMenu} />
       <main className="main">
         <div className="main__content-wrapper">
           <div className="main__text-wrapper">

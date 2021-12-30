@@ -1,10 +1,12 @@
 import React from "react";
 import "./MoviesCard.css";
 import { SavedMoviesContext } from "../../context/SavedMoviesContext";
+import { CurrentUser } from "../../context/CurrentUser";
 
 function MoviesCard(props) {
+  const user = React.useContext(CurrentUser);
   const isLiked = React.useContext(SavedMoviesContext).some(
-    (i) => i.movieId === props.card.movieId
+    (i) => i.movieId === props.card.movieId && user.id === i.owner
   );
 
   const handleLikeButton = () => {
@@ -25,7 +27,9 @@ function MoviesCard(props) {
         ></button>
       </div>
       <div className="card__img-wrapper">
-        <img className="card__img" src={props.image} alt="фото фильма"></img>
+        <a href={props.trailer} target="_blank" rel="noreferrer">
+          <img className="card__img" src={props.image} alt="фото фильма"></img>
+        </a>
       </div>
     </div>
   );

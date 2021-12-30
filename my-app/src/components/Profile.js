@@ -13,8 +13,8 @@ function Profile(props) {
   const [errorEmail, setErrorEmail] = useState("");
   const [errorName, setErrorName] = useState("");
 
-  const [emailisValid, setEmailIsValid] = useState(false);
-  const [nameIsValid, setNameIsValid] = useState(false);
+  const [emailisValid, setEmailIsValid] = useState(true);
+  const [nameIsValid, setNameIsValid] = useState(true);
   const [formIsvalid, setFormIsValid] = useState(false);
 
   const onSubmit = (e) => {
@@ -22,23 +22,28 @@ function Profile(props) {
     props.change(name, email);
   };
 
-  const signOut = () => {
-    localStorage.removeItem("jwt");
-  };
-
   useEffect(() => {
-    if (user.name === name) {
+    const current = user.name === name && user.email === email;
+    if (current) {
       return setFormIsValid(false);
-    } else setFormIsValid(nameIsValid && emailisValid);
-  }, [name]);
+    }
+    setFormIsValid(nameIsValid && emailisValid);
+  }, [user, name, nameIsValid, email, emailisValid, formIsvalid]);
 
   return (
     <>
-      <Header burgerMenu={props.handleBurgerMenu}></Header>
+      <Header
+        burgerMenu={props.handleBurgerMenu}
+        isLogedIn={props.isLogedIn}
+      ></Header>
       <div className="profile">
         <div className="profile__wrapper">
           <div className="profile__header">Привет {user.name}!</div>
-          <form className="profile__form" onSubmit={onSubmit}>
+          <form
+            className="profile__form"
+            onSubmit={onSubmit}
+            isValid={formIsvalid}
+          >
             <p className="profile__label">Имя</p>
             <input
               minLength="2"
@@ -60,6 +65,7 @@ function Profile(props) {
               type="email"
               value={email}
               required
+              pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
               onChange={(e) => {
                 setEmail(e.target.value);
                 setEmailIsValid(e.target.checkValidity());
@@ -71,11 +77,11 @@ function Profile(props) {
               className={
                 formIsvalid ? "profile__button" : "profile__button_disabled"
               }
-              disabled={!formIsvalid}
+              disabled={formIsvalid ? false : true}
             >
               Редактировать
             </button>
-            <Link to="/" className="profile__button" onClick={signOut}>
+            <Link to="/" className="profile__button" onClick={props.onSignOut}>
               Выйти из аккаунта
             </Link>
             <span className="profile__message">{props.statusText}</span>

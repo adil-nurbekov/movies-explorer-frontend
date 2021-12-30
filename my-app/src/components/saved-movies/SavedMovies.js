@@ -24,27 +24,23 @@ function SavedMovies(props) {
   };
   return (
     <>
-      <Header isMain={false} burgerMenu={props.handleBurgerMenu} />
-      <SearchForm onSubmit={onSubmit} checked={props.checked}></SearchForm>
+      <Header isLogedIn={props.isLogedIn} burgerMenu={props.handleBurgerMenu} />
+      <SearchForm onSubmit={onSubmit}></SearchForm>
       <div className="saved">
-        {saved.length === 0 ? (
-          <div className="saved__empty">
-            Здесь пусто, добавьте ваш любимый фильм
-          </div>
-        ) : (
-          saved.map((card) => {
-            return (
-              <SavedMoviesCard
-                card={card}
-                image={card.image}
-                name={card.nameRU}
-                key={card._id}
-                duration={duration(card.duration)}
-                deleteCard={deleteCard}
-              ></SavedMoviesCard>
-            );
-          })
-        )}
+        <div className="saved__empty">{props.movieText}</div>{" "}
+        {saved.map((card) => {
+          return (
+            <SavedMoviesCard
+              card={card}
+              image={card.image}
+              name={card.nameRU}
+              key={card._id}
+              duration={duration(card.duration)}
+              deleteCard={deleteCard}
+              trailer={card.trailer}
+            ></SavedMoviesCard>
+          );
+        })}
       </div>
       <Footer></Footer>
     </>

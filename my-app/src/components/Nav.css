@@ -1,0 +1,212 @@
+.nav-menu {
+  /* display: flex;
+  background-color: #f3c1f8;
+  justify-content: space-between;
+  padding: 18px 70px;
+  align-items: center; */
+  }
+  .nav__link-reg {
+    text-decoration: none;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #000000;
+    padding-right: 30px;
+    transition: all 0.5s ease-in-out;
+  }
+  .nav__link-log {
+    text-decoration: none;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #ffffff;
+    border-radius: 3px;
+    padding: 8px 20px;
+    background: #000000;
+    transition: all 0.5s ease-in-out;
+  }
+  .nav__link-log:hover {
+    color: #f3c1f8;
+  }
+  .nav__link-reg:hover{
+  color: #ffffff;
+  }
+  @media (max-width: 768px) {
+    .nav {
+      padding: 18px 30px;
+    }
+  }
+  .nav-main {
+
+    /* display: flex;
+    background-color: #ffffff;
+    justify-content: space-between;
+    padding: 18px 70px;
+    align-items: center; */
+  }
+  .nav-main__logo{
+  width: 38px;
+  height:38px;
+  background-image: url(../images/headerLogo.svg);
+  transition: all 1s ease-in-out;
+  }
+  .nav-main__logo:hover{
+    transform: rotate(360deg)
+  }
+  
+  .nav-main__account {
+    box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
+    border-radius: 40px;
+    padding: 11px 9.5px;
+    display: flex;
+    position: relative;
+  }
+  .nav-main__profile {
+    text-align: center;
+    padding-right: 36px;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 12px;
+    text-decoration: none;
+    color: #000000;
+  }
+  .nav-main__profile-img {
+    border-radius: 50%;
+    padding: 7.5px;
+    background: #f9f9f9;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+  }
+  
+  .nav-main__films {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 18px;
+    text-decoration: none;
+    padding-right: 16px;
+    text-align: center;
+  
+    color: #000000;
+  }
+  .nav-main__films:last-child {
+    padding-right: 0;
+  }
+  .active {
+    font-weight: bold;
+  }
+  .burger {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    .nav-main__account {
+      display: none;
+    }
+    .nav-main__text {
+      display: none;
+    }
+    .nav-main {
+      padding: 18px 30px;
+    }
+    .nav{
+      padding: 18px 30px;
+    }
+  }
+  @media (max-width: 440px) {
+    .nav-main {
+      padding: 14px 18px;
+    }
+    .nav{
+      padding: 14px 18px;
+    }
+    .nav__link-log{
+      font-size: 10px;
+      line-height: 16px;
+      padding: 5px 12px;
+    }
+    .nav__link-reg{
+      font-size: 10px;
+      line-height: 16px;
+    }
+   
+  }
+
+  .main-nav__link {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: #ffffff;
+    margin-right: 40px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+  .nav__burger {
+    display: none;
+    cursor: po Inter, Arial, Helvetica, sans-serif;
+    position: relative;
+    width: 28px;
+    height: 23px;
+  }
+  .nav__burger span {
+    content: "";
+    position: absolute;
+    top: 9px;
+    width: 28px;
+    background: #000000;
+    height: 3px;
+  }
+  .nav__burger::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 28px;
+    background: #000000;
+    height: 3px;
+  }
+  .nav__burger:before {
+    content: " ";
+    bottom: 0;
+    position: absolute;
+    width: 28px;
+    background: #000000;
+    height: 3px;
+  }
+  
+  .main-nav__link:last-child {
+    margin-right: 0;
+  }
+  @media screen and (max-width: 768px) {
+    .nav__burger {
+      display: block;
+    }
+  }
+  @media screen and (max-width: 440px) {
+    .nav__burger::after {
+      width: 22px;
+      height: 2.5px;
+    }
+    .nav__burger:before {
+      width: 22px;
+      height: 2.5px;
+    }
+    .nav__burger span {
+      width: 22px;
+      height: 2.5px;
+    }
+    .nav__burger {
+      width: 22px;
+      height: 20.5px;
+    }
+  }
+  

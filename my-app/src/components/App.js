@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import "./App.css";
 import Main from "./main/Main";
 import Register from "./Register";
@@ -23,7 +17,7 @@ import * as MovieApi from "../utils/MovieApi";
 
 function App() {
   const token = localStorage.getItem("jwt");
-  const location = useLocation();
+
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState("");
   const [movieText, setMovieText] = useState("");
@@ -33,8 +27,6 @@ function App() {
   const [isLoggedIn, setIsLogedIn] = useState(false);
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
   const [statusText, setStatusText] = useState("");
-  const [checkbox, setCheckbox] = useState(false);
-  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -46,7 +38,7 @@ function App() {
         getSavedMovies();
       });
     }
-  }, [isLoggedIn]);
+  }, [token]);
 
   // BURGER MENU
   const closeBurger = () => {
@@ -178,7 +170,7 @@ function App() {
   //
 
   // HANDLE SEARCH BUTTON
-  const findMovies = (input) => {
+  const findMovies = (checked) => {
     setLoading(true);
     MovieApi.getAllMovies()
       .then((res) => {
@@ -197,21 +189,31 @@ function App() {
             nameRU: movie.nameRU,
           };
         });
-        localStorage.setItem("allMovies", JSON.stringify(movieArray));
-
+        const input = localStorage.getItem("input");
         const array = movieArray.filter((m) =>
           JSON.stringify(m).toLowerCase().includes(input.toLowerCase())
         );
+        localStorage.setItem("result", JSON.stringify(array));
         if (array.length === 0) {
           setMovieText("Ничего не найдено");
           setTimeout(() => setMovieText(""), 2000);
 
           return setLoading(false);
         }
-        setMovies(array);
-        setMovieText("");
-        setLoading(false);
-        setIsActive(true);
+        if (checked) {
+          const sorted = array.filter((m) => m.duration <= 40);
+          setMovieText(sorted.length > 0 ? "" : "Ничего не найдено");
+          setLoading(false);
+          setMovies(sorted);
+          console.log(sorted);
+          return;
+        } else {
+          setMovies(array);
+          setMovieText("");
+          setLoading(false);
+
+          console.log(array);
+        }
       })
       .catch((err) => {
         setMovieText(
@@ -222,25 +224,47 @@ function App() {
   //
 
   // HANDLE SEARCH BUTTON FROM SAVED MOVIE PAGE
-  const findSavedMovies = (input) => {
-    console.log(input);
+  const findSavedMovies = (checked) => {
+    setLoading(true);
+    MainApi.getSavedMovies(token)
+      .then((res) => {
+        const input = localStorage.getItem("input");
+        const savedArray = res.filter((m) =>
+          JSON.stringify(m).toLowerCase().includes(input.toLowerCase())
+        );
+        localStorage.setItem("savedSearch", savedArray);
+        if (savedArray.length === 0) {
+          setMovieText("Ничего не найдено");
+          setTimeout(() => setMovieText(""), 2000);
+
+          return setLoading(false);
+        }
+        if (checked) {
+          const sorted = savedArray.filter((m) => m.duration <= 40);
+          setMovieText("");
+          setLoading(false);
+          setSavedMovies(sorted);
+        }
+
+        setMovieText("");
+        setSavedMovies(savedArray);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setMovieText(
+          "«Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз»."
+        );
+      });
   };
   //
 
-  const checked = () => {
-    setCheckbox(!checkbox);
+  // SIGN OUT METHOD
+  const signOut = () => {
+    localStorage.clear();
+    setIsLogedIn(false);
+    console.log(isLoggedIn);
   };
-
-  // useEffect(() => {
-  //   location.pathname === "/saved-movies" && checkbox
-  //     ? setSavedMovies(savedMovies.filter((m) => m.duration <= 40))
-  //     : setSavedMovies(savedMovies);
-  // }, [checkbox]);
-
-  const loadMore = () => {
-    setMovies(movies.slice(0, 14));
-    console.log(movies);
-  };
+  //
 
   return (
     <div>
@@ -248,13 +272,22 @@ function App() {
         <AllMovies.Provider value={movies}>
           <CurrentUser.Provider value={currentUser}>
             <Routes>
-              <Route path="/" element={<Main />}></Route>
+              <Route
+                path="/"
+                element={
+                  <Main
+                    isLogedIn={isLoggedIn}
+                    handleBurgerMenu={handleBurgerMenu}
+                  />
+                }
+              ></Route>
               <Route
                 path="/signup"
                 element={
                   <Register onRegister={onRegister} statusText={statusText} />
                 }
               ></Route>
+              <Route path="/ds" element={<PageNotFound />}></Route>
               <Route
                 path="/signin"
                 element={<Login onLogin={onLogin} statusText={statusText} />}
@@ -267,7 +300,8 @@ function App() {
                       handleBurgerMenu={handleBurgerMenu}
                       deleteCard={deleteCard}
                       handleSubmit={findSavedMovies}
-                      checked={checked}
+                      isLogedIn={isLoggedIn}
+                      movieText={movieText}
                     />
                   ) : (
                     <Navigate to={"/"} />
@@ -285,11 +319,8 @@ function App() {
                       deleteMovie={deleteMovie}
                       findMovies={findMovies}
                       loading={loading}
-                      checked={checked}
-                      checkbox={checkbox}
                       movieText={movieText}
-                      isActive={isActive}
-                      loadMore={loadMore}
+                      isLogedIn={isLoggedIn}
                     />
                   ) : (
                     <Navigate to={"/"} />
@@ -305,13 +336,14 @@ function App() {
                       handleBurgerMenu={handleBurgerMenu}
                       change={onChange}
                       statusText={statusText}
+                      isLogedIn={isLoggedIn}
+                      onSignOut={signOut}
                     />
                   ) : (
                     <Navigate to={"/"} />
                   )
                 }
               ></Route>
-              <Route path="*" element={<PageNotFound />}></Route>
             </Routes>
             <BurgerMenu
               isOpen={isBurgerOpen}

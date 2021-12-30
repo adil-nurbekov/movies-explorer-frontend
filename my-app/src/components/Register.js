@@ -22,8 +22,7 @@ function Register(props) {
 
   useEffect(() => {
     setIsFormValid(emailIsValid && nameIsValid && passwordIsValid);
-    console.log(isFormValid);
-  });
+  }, [emailIsValid, nameIsValid, passwordIsValid]);
 
   return (
     <section className="registration">
@@ -60,6 +59,7 @@ function Register(props) {
             id="user-email"
             type="email"
             value={email}
+            pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
             onChange={(e) => {
               setEmail(e.target.value);
               setEmailIsValid(e.target.checkValidity());
