@@ -53,31 +53,29 @@ export const checkToken = (token) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-  })
-    .then((res) => checkResponseStatus(res))
-    .then((data) => data);
+  }).then((res) => checkResponseStatus(res));
 };
 //
 
 // GET USER INFO METHOD
-export const getUserInfo = (token) => {
+export const getUserInfo = () => {
   return fetch(`${SERVER_URL}/users/me`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
   }).then((res) => checkResponseStatus(res));
 };
 //
 
 // CHANGE USER INFO METHOD
-export const changeUsersInfo = (name, email, token) => {
+export const changeUsersInfo = (name, email) => {
   return fetch(`${SERVER_URL}/users/me`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
     method: "PATCH",
     body: JSON.stringify({ name, email }),
@@ -86,46 +84,46 @@ export const changeUsersInfo = (name, email, token) => {
 //
 
 // ADD MOVIE TO SAVED METHOD
-export const saveMovie = (data, token) => {
+export const saveMovie = (data) => {
   return fetch(`${SERVER_URL}/movies`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
     method: "POST",
     body: JSON.stringify({
-      country: data.country,
+      country: data.country === null ? "неизвестно" : data.country,
       director: data.director,
       duration: data.duration,
       year: data.year,
       description: data.description,
-      image: data.image,
-      trailer: data.trailer,
-      thumbnail: data.thumbnail,
-      movieId: data.movieId,
+      image: `https://api.nomoreparties.co${data.image.url}`,
+      trailer: data.trailerLink,
+      thumbnail: `https://api.nomoreparties.co${data.image.formats.thumbnail.url}`,
+      movieId: data.id,
       nameRU: data.nameRU,
       nameEN: data.nameEN,
     }),
   }).then((res) => checkResponseStatus(res));
 };
 // GET ALL SAVED MOVIES METHOD
-export const getSavedMovies = (token) => {
+export const getSavedMovies = () => {
   return fetch(`${SERVER_URL}/movies`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
   }).then((res) => checkResponseStatus(res));
 };
 
-export const deleteSavedMovie = (token, movieId) => {
+export const deleteSavedMovie = (movieId) => {
   return fetch(`${SERVER_URL}/movies/` + movieId, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
     method: "DELETE",
   }).then((res) => checkResponseStatus(res));

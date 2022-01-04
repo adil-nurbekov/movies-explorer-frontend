@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header";
 import SearchForm from "../movies/SearchForm";
 import SavedMoviesCard from "./SavedMoviesCard";
@@ -7,8 +7,9 @@ import { SavedMoviesContext } from "../../context/SavedMoviesContext";
 import "./SavedMovies.css";
 
 function SavedMovies(props) {
-  const saved = React.useContext(SavedMoviesContext);
-
+  // const saved = React.useContext(SavedMoviesContext);
+  const [savedRendered, setSavedRendered] = useState(props.savedMovies);
+  const [savedChecked, setSavedChecked] = useState(false);
   const duration = (num) => {
     const hours = Math.floor(num / 60);
     const minutes = Math.floor(num - hours * 60);
@@ -22,13 +23,29 @@ function SavedMovies(props) {
   const onSubmit = (input) => {
     props.handleSubmit(input);
   };
+
+  const savedHandleCheck = () => {
+    setSavedChecked(!savedChecked);
+  };
+
+  useEffect(() => {
+    savedChecked
+      ? setSavedRendered(
+          props.savedMovies.filter((movie) => movie.duration <= 40)
+        )
+      : setSavedRendered(props.savedMovies);
+  }, [savedChecked, props.savedMovies]);
   return (
     <>
       <Header isLogedIn={props.isLogedIn} burgerMenu={props.handleBurgerMenu} />
-      <SearchForm onSubmit={onSubmit}></SearchForm>
+      <SearchForm
+        onSubmit={onSubmit}
+        savedChecked={savedChecked}
+        savedHandleCheck={savedHandleCheck}
+      ></SearchForm>
       <div className="saved">
         <div className="saved__empty">{props.movieText}</div>{" "}
-        {saved.map((card) => {
+        {savedRendered.map((card) => {
           return (
             <SavedMoviesCard
               card={card}

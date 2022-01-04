@@ -6,7 +6,7 @@ import { CurrentUser } from "../../context/CurrentUser";
 function MoviesCard(props) {
   const user = React.useContext(CurrentUser);
   const isLiked = React.useContext(SavedMoviesContext).some(
-    (i) => i.movieId === props.card.movieId && user.id === i.owner
+    (i) => i.movieId === props.card.id && user.id === i.owner
   );
 
   const handleLikeButton = () => {

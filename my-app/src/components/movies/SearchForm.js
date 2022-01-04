@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import loop from "../../images/loop.svg";
 import "./SearchForm.css";
 
 function SearchForm(props) {
+  const location = useLocation();
   const [input, setInput] = useState("");
-  const [checked, setChecked] = useState(false);
+  const [inputSaved, setInputSaved] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("input", input);
-    props.onSubmit(checked);
-  };
-
-  const handleCheck = () => {
-    setChecked(!checked);
-    localStorage.setItem("checked", checked);
+    props.onSubmit(input);
   };
 
   useEffect(() => {
     setInput(localStorage.getItem("input"));
-    setChecked(localStorage.getItem("checked"));
-  }, [checked]);
+    setInputSaved(localStorage.getItem("inputSaved"));
+  }, []);
 
   return (
     <div className="search">
@@ -31,9 +27,12 @@ function SearchForm(props) {
           type="search"
           placeholder="Фильмы"
           required
-          value={input || ""}
+          value={
+            location.pathname === "/movies" ? input || "" : inputSaved || ""
+          }
           onChange={(e) => {
             setInput(e.target.value);
+            setInputSaved(e.target.value);
           }}
         ></input>
         <button className="search__button" type="submit">
@@ -45,8 +44,16 @@ function SearchForm(props) {
           <input
             className="search__checkbox"
             type="checkbox"
-            checked={checked}
-            onChange={handleCheck}
+            defaultChecked={
+              location.pathname === "/movies"
+                ? props.checked
+                : props.savedChecked
+            }
+            onChange={
+              location.pathname === "/movies"
+                ? props.handleCheck
+                : props.savedHandleCheck
+            }
           ></input>
           <p className="search__text">Короткометражки</p>
         </div>

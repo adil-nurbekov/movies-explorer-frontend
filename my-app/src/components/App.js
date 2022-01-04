@@ -10,14 +10,13 @@ import Profile from "./Profile";
 import Movies from "./movies/Movies";
 import BurgerMenu from "./movies/BurgerMenu";
 import { CurrentUser } from "../context/CurrentUser";
-import { AllMovies } from "../context/AllMovies";
 import { SavedMoviesContext } from "../context/SavedMoviesContext";
+import { AllMovies } from "../context/AllMovies";
 import * as MainApi from "../utils/MainApi";
 import * as MovieApi from "../utils/MovieApi";
+import PagePreloader from "./PagePreloader";
 
 function App() {
-  const token = localStorage.getItem("jwt");
-
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState("");
   const [movieText, setMovieText] = useState("");
@@ -27,18 +26,28 @@ function App() {
   const [isLoggedIn, setIsLogedIn] = useState(false);
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
   const [statusText, setStatusText] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    if (token) {
-      MainApi.checkToken(token).then((res) => {
-        MainApi.getUserInfo(token);
-        setCurrentUser(res);
-        setIsLogedIn(true);
-        navigate("/movies");
-        getSavedMovies();
-      });
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   setAuthorize(false);
+  //   // checkToken();
+  //   setAuthorize(true);
+  //   if (isLoggedIn) {
+  //     Promise.all([MovieApi.getAllMovies(), MainApi.getUserInfo()])
+  //       .then((res) => {
+  //         const [moviesArray, userInfo] = res;
+  //         setCurrentUser(userInfo);
+  //         // getSavedMovies();
+  //         if (localStorage.getItem("movies") === null) {
+  //           localStorage.setItem("movies", JSON.stringify([]));
+  //           console.log("nofilm");
+  //         }
+  //         setMovies(JSON.parse(localStorage.getItem("movies")));
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  //   console.log("need auth");
+  // }, [isLoggedIn, authorize]);
 
   // BURGER MENU
   const closeBurger = () => {
@@ -99,7 +108,7 @@ function App() {
 
   // CHANGE USERS INFO
   const onChange = (name, email) => {
-    MainApi.changeUsersInfo(name, email, token)
+    MainApi.changeUsersInfo(name, email)
       .then((res) => {
         setCurrentUser(res);
         setStatusText("Ваши данные были изменены");
@@ -123,7 +132,7 @@ function App() {
 
   // GET SAVED MOVIES
   const getSavedMovies = () => {
-    MainApi.getSavedMovies(token)
+    MainApi.getSavedMovies()
       .then((res) => {
         setSavedMovies(res);
       })
@@ -134,7 +143,7 @@ function App() {
 
   // SAVE MOVIE
   const saveMovie = (card) => {
-    MainApi.saveMovie(card, token)
+    MainApi.saveMovie(card)
       .then(() => {
         getSavedMovies();
       })
@@ -146,8 +155,8 @@ function App() {
 
   // DELETE MOVIE FROM MOVIE PAGE
   const deleteMovie = (movie) => {
-    const id = savedMovies.find((card) => card.movieId === movie.movieId);
-    MainApi.deleteSavedMovie(token, id._id)
+    const id = savedMovies.find((card) => card.movieId === movie.id);
+    MainApi.deleteSavedMovie(id._id)
       .then(() => {
         getSavedMovies();
       })
@@ -159,7 +168,7 @@ function App() {
 
   // DELETE MOVIE FROM SAVED MOVIE PAGE
   const deleteCard = (card) => {
-    MainApi.deleteSavedMovie(token, card._id)
+    MainApi.deleteSavedMovie(card._id)
       .then(() => {
         getSavedMovies();
       })
@@ -170,50 +179,21 @@ function App() {
   //
 
   // HANDLE SEARCH BUTTON
-  const findMovies = (checked) => {
+  const findMovies = (input) => {
     setLoading(true);
     MovieApi.getAllMovies()
       .then((res) => {
-        const movieArray = res.map((movie) => {
-          return {
-            country: movie.country,
-            director: movie.director,
-            duration: movie.duration,
-            year: movie.year,
-            description: movie.description,
-            image: `https://api.nomoreparties.co${movie.image.url}`,
-            trailer: movie.trailerLink,
-            thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
-            movieId: movie.id,
-            nameEN: movie.nameEN,
-            nameRU: movie.nameRU,
-          };
-        });
-        const input = localStorage.getItem("input");
-        const array = movieArray.filter((m) =>
+        const array = res.filter((m) =>
           JSON.stringify(m).toLowerCase().includes(input.toLowerCase())
         );
-        localStorage.setItem("result", JSON.stringify(array));
-        if (array.length === 0) {
-          setMovieText("Ничего не найдено");
-          setTimeout(() => setMovieText(""), 2000);
 
-          return setLoading(false);
-        }
-        if (checked) {
-          const sorted = array.filter((m) => m.duration <= 40);
-          setMovieText(sorted.length > 0 ? "" : "Ничего не найдено");
-          setLoading(false);
-          setMovies(sorted);
-          console.log(sorted);
-          return;
-        } else {
-          setMovies(array);
-          setMovieText("");
-          setLoading(false);
-
-          console.log(array);
-        }
+        setMovies(array);
+        localStorage.setItem("movies", JSON.stringify(array));
+        localStorage.setItem("input", input);
+        setLoading(false);
+        array.length === 0
+          ? setMovieText("Ничего не найдено")
+          : setMovieText("");
       })
       .catch((err) => {
         setMovieText(
@@ -221,34 +201,24 @@ function App() {
         );
       });
   };
-  //
 
   // HANDLE SEARCH BUTTON FROM SAVED MOVIE PAGE
-  const findSavedMovies = (checked) => {
+  const findSavedMovies = (inputSaved) => {
     setLoading(true);
-    MainApi.getSavedMovies(token)
+    MainApi.getSavedMovies()
       .then((res) => {
-        const input = localStorage.getItem("input");
         const savedArray = res.filter((m) =>
-          JSON.stringify(m).toLowerCase().includes(input.toLowerCase())
+          JSON.stringify(m).toLowerCase().includes(inputSaved.toLowerCase())
         );
-        localStorage.setItem("savedSearch", savedArray);
-        if (savedArray.length === 0) {
-          setMovieText("Ничего не найдено");
-          setTimeout(() => setMovieText(""), 2000);
 
-          return setLoading(false);
-        }
-        if (checked) {
-          const sorted = savedArray.filter((m) => m.duration <= 40);
-          setMovieText("");
-          setLoading(false);
-          setSavedMovies(sorted);
-        }
-
-        setMovieText("");
         setSavedMovies(savedArray);
+        localStorage.setItem("savedSearch", JSON.stringify(savedArray));
+        localStorage.setItem("inputSaved", inputSaved);
         setLoading(false);
+
+        savedArray.length === 0
+          ? setMovieText("Ничего не найдено")
+          : setMovieText("");
       })
       .catch((err) => {
         setMovieText(
@@ -262,96 +232,135 @@ function App() {
   const signOut = () => {
     localStorage.clear();
     setIsLogedIn(false);
-    console.log(isLoggedIn);
   };
   //
 
+  // CHECK TOKEN METHOD
+  const checkToken = () => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      MainApi.checkToken(token)
+        .then(() => {
+          setIsLogedIn(true);
+          setIsLoaded(true);
+          console.log(isLoggedIn);
+          navigate("/movies");
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+  //
+  useEffect(() => {
+    checkToken();
+    if (isLoggedIn) {
+      MainApi.getUserInfo()
+        .then((user) => {
+          setCurrentUser(user);
+          getSavedMovies();
+          // navigate("/movies");
+          if (localStorage.getItem("movies") === null) {
+            localStorage.setItem("movies", JSON.stringify([]));
+          }
+          setMovies(JSON.parse(localStorage.getItem("movies")));
+        })
+        .catch((err) => console.log(err))
+        .finally(() => setIsLoaded(true));
+    } else {
+      setIsLoaded(true);
+    }
+  }, []);
+
   return (
     <div>
-      <SavedMoviesContext.Provider value={savedMovies}>
-        <AllMovies.Provider value={movies}>
+      <AllMovies.Provider value={movies}>
+        <SavedMoviesContext.Provider value={savedMovies}>
           <CurrentUser.Provider value={currentUser}>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Main
-                    isLogedIn={isLoggedIn}
-                    handleBurgerMenu={handleBurgerMenu}
-                  />
-                }
-              ></Route>
-              <Route
-                path="/signup"
-                element={
-                  <Register onRegister={onRegister} statusText={statusText} />
-                }
-              ></Route>
-              <Route path="/ds" element={<PageNotFound />}></Route>
-              <Route
-                path="/signin"
-                element={<Login onLogin={onLogin} statusText={statusText} />}
-              ></Route>
-              <Route
-                path="saved-movies"
-                element={
-                  isLoggedIn ? (
-                    <SavedMovies
-                      handleBurgerMenu={handleBurgerMenu}
-                      deleteCard={deleteCard}
-                      handleSubmit={findSavedMovies}
+            {isLoaded ? (
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <Main
                       isLogedIn={isLoggedIn}
-                      movieText={movieText}
+                      handleBurgerMenu={handleBurgerMenu}
                     />
-                  ) : (
-                    <Navigate to={"/"} />
-                  )
-                }
-              ></Route>
+                  }
+                ></Route>
+                <Route
+                  path="/signup"
+                  element={
+                    <Register onRegister={onRegister} statusText={statusText} />
+                  }
+                ></Route>
+                <Route path="/*" element={<PageNotFound />}></Route>
+                <Route
+                  path="/signin"
+                  element={<Login onLogin={onLogin} statusText={statusText} />}
+                ></Route>
+                <Route
+                  path="saved-movies"
+                  element={
+                    isLoggedIn ? (
+                      <SavedMovies
+                        savedMovies={savedMovies}
+                        handleBurgerMenu={handleBurgerMenu}
+                        deleteCard={deleteCard}
+                        handleSubmit={findSavedMovies}
+                        isLogedIn={isLoggedIn}
+                        movieText={movieText}
+                      />
+                    ) : (
+                      <Navigate to={"/"} />
+                    )
+                  }
+                ></Route>
 
-              <Route
-                path={"/movies"}
-                element={
-                  isLoggedIn ? (
-                    <Movies
-                      handleBurgerMenu={handleBurgerMenu}
-                      saveMovie={saveMovie}
-                      deleteMovie={deleteMovie}
-                      findMovies={findMovies}
-                      loading={loading}
-                      movieText={movieText}
-                      isLogedIn={isLoggedIn}
-                    />
-                  ) : (
-                    <Navigate to={"/"} />
-                  )
-                }
-              ></Route>
+                <Route
+                  path={"/movies"}
+                  element={
+                    isLoggedIn ? (
+                      <Movies
+                        movies={movies}
+                        handleBurgerMenu={handleBurgerMenu}
+                        saveMovie={saveMovie}
+                        deleteMovie={deleteMovie}
+                        findMovies={findMovies}
+                        loading={loading}
+                        movieText={movieText}
+                        isLogedIn={isLoggedIn}
+                      />
+                    ) : (
+                      <Navigate to={"/"} />
+                    )
+                  }
+                ></Route>
 
-              <Route
-                path="/profile"
-                element={
-                  isLoggedIn ? (
-                    <Profile
-                      handleBurgerMenu={handleBurgerMenu}
-                      change={onChange}
-                      statusText={statusText}
-                      isLogedIn={isLoggedIn}
-                      onSignOut={signOut}
-                    />
-                  ) : (
-                    <Navigate to={"/"} />
-                  )
-                }
-              ></Route>
-            </Routes>
+                <Route
+                  path="/profile"
+                  element={
+                    isLoggedIn ? (
+                      <Profile
+                        handleBurgerMenu={handleBurgerMenu}
+                        change={onChange}
+                        statusText={statusText}
+                        isLogedIn={isLoggedIn}
+                        onSignOut={signOut}
+                      />
+                    ) : (
+                      <Navigate to={"/"} />
+                    )
+                  }
+                ></Route>
+              </Routes>
+            ) : null}
+
             <BurgerMenu
               isOpen={isBurgerOpen}
               closeBurger={closeBurger}
             ></BurgerMenu>
           </CurrentUser.Provider>
-        </AllMovies.Provider>
-      </SavedMoviesContext.Provider>
+        </SavedMoviesContext.Provider>
+      </AllMovies.Provider>
     </div>
   );
 }
