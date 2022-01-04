@@ -9,7 +9,6 @@ import Preloader from "../Preloader";
 import "./Movies.css";
 
 function Movies(props) {
-  // const movies = React.useContext(AllMovies);
   const [rendered, setRendered] = useState([]);
   const [count, setCount] = useState(7);
   const [more, setMore] = useState(0);
@@ -18,7 +17,6 @@ function Movies(props) {
   const location = useLocation().pathname;
   const loadMore = () => {
     setMore(more + count);
-    console.log(more + count);
     if (props.movies.length <= more + count) {
       setIsActive(false);
     }
@@ -58,7 +56,6 @@ function Movies(props) {
     } else {
       setRendered(props.movies);
       setIsActive(false);
-      console.log(props.movies);
     }
   }, [props.movies, count, more]);
 

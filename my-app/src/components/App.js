@@ -28,27 +28,6 @@ function App() {
   const [statusText, setStatusText] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // useEffect(() => {
-  //   setAuthorize(false);
-  //   // checkToken();
-  //   setAuthorize(true);
-  //   if (isLoggedIn) {
-  //     Promise.all([MovieApi.getAllMovies(), MainApi.getUserInfo()])
-  //       .then((res) => {
-  //         const [moviesArray, userInfo] = res;
-  //         setCurrentUser(userInfo);
-  //         // getSavedMovies();
-  //         if (localStorage.getItem("movies") === null) {
-  //           localStorage.setItem("movies", JSON.stringify([]));
-  //           console.log("nofilm");
-  //         }
-  //         setMovies(JSON.parse(localStorage.getItem("movies")));
-  //       })
-  //       .catch((err) => console.log(err));
-  //   }
-  //   console.log("need auth");
-  // }, [isLoggedIn, authorize]);
-
   // BURGER MENU
   const closeBurger = () => {
     setIsBurgerOpen(false);
@@ -240,11 +219,11 @@ function App() {
     const token = localStorage.getItem("jwt");
     if (token) {
       MainApi.checkToken(token)
-        .then(() => {
+        .then((res) => {
+          setCurrentUser(res);
+          getSavedMovies();
           setIsLogedIn(true);
           setIsLoaded(true);
-          console.log(isLoggedIn);
-          navigate("/movies");
         })
         .catch((err) => console.log(err));
     }
@@ -257,15 +236,14 @@ function App() {
         .then((user) => {
           setCurrentUser(user);
           getSavedMovies();
-          // navigate("/movies");
-          if (localStorage.getItem("movies") === null) {
-            localStorage.setItem("movies", JSON.stringify([]));
-          }
-          setMovies(JSON.parse(localStorage.getItem("movies")));
         })
         .catch((err) => console.log(err))
         .finally(() => setIsLoaded(true));
     } else {
+      if (localStorage.getItem("movies") === null) {
+        localStorage.setItem("movies", JSON.stringify([]));
+      }
+      setMovies(JSON.parse(localStorage.getItem("movies")));
       setIsLoaded(true);
     }
   }, []);
@@ -352,7 +330,9 @@ function App() {
                   }
                 ></Route>
               </Routes>
-            ) : null}
+            ) : (
+              <PagePreloader></PagePreloader>
+            )}
 
             <BurgerMenu
               isOpen={isBurgerOpen}
