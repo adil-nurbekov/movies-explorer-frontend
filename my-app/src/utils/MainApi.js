@@ -32,16 +32,7 @@ export const login = (email, password) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
-  })
-    .then((response) => checkResponseStatus(response))
-    .then((res) => {
-      if (res.token) {
-        localStorage.setItem("jwt", res.token);
-        return res;
-      } else {
-        return;
-      }
-    });
+  }).then((response) => checkResponseStatus(response));
 };
 //
 
@@ -63,7 +54,7 @@ export const getUserInfo = () => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   }).then((res) => checkResponseStatus(res));
 };
@@ -75,7 +66,7 @@ export const changeUsersInfo = (name, email) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     method: "PATCH",
     body: JSON.stringify({ name, email }),
@@ -89,7 +80,7 @@ export const saveMovie = (data) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     method: "POST",
     body: JSON.stringify({
@@ -113,7 +104,7 @@ export const getSavedMovies = () => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   }).then((res) => checkResponseStatus(res));
 };
@@ -123,7 +114,7 @@ export const deleteSavedMovie = (movieId) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     method: "DELETE",
   }).then((res) => checkResponseStatus(res));

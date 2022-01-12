@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+
 import Header from "../Header";
 import SearchForm from "./SearchForm";
 import MoviesCard from "./MoviesCard";
@@ -13,13 +13,11 @@ function Movies(props) {
   const [count, setCount] = useState(7);
   const [more, setMore] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [checked, setChecked] = useState(false);
-  const location = useLocation().pathname;
+
+  const [disabled, setDisabled] = useState(true);
+
   const loadMore = () => {
     setMore(more + count);
-    if (props.movies.length <= more + count) {
-      setIsActive(false);
-    }
   };
 
   const onSubmit = (input) => {
@@ -33,31 +31,30 @@ function Movies(props) {
     props.deleteMovie(card);
   };
 
-  const handleCheck = () => {
-    setChecked(!checked);
-    localStorage.setItem("check", checked);
-  };
-
   useEffect(() => {
-    checked
-      ? setRendered(props.movies.filter((movie) => movie.duration <= 40))
-      : setRendered(props.movies);
-    // setChecked(localStorage.getItem("checked"));
-  }, [checked, props.movies]);
-
-  useEffect(() => {
-    if (location === "/movies") {
-      setRendered(props.movies.slice(0, count + more));
-      if (props.movies.length <= count + more) {
-        setIsActive(false);
-      } else {
-        setIsActive(true);
-      }
+    if (props.movies.length > count + more) {
+      setIsActive(true);
     } else {
-      setRendered(props.movies);
       setIsActive(false);
     }
-  }, [props.movies, count, more]);
+    if (props.movies.length !== 0) {
+      setDisabled(false);
+    }
+    props.checked
+      ? setRendered(props.movies.filter((movie) => movie.duration <= 40))
+      : setRendered(props.movies);
+  }, [props.checked, props.movies, more, count]);
+
+  // useEffect(() => {
+  //   if (location === "/movies") {
+  //     setRendered(props.movies.slice(0, count + more));
+  //     if (props.movies.length <= count + more) {
+  //       setIsActive(false);
+  //     } else {
+  //       setIsActive(true);
+  //     }
+  //   }
+  // }, [props.movies, count, more]);
 
   const duration = (num) => {
     const hours = Math.floor(num / 60);
@@ -70,17 +67,18 @@ function Movies(props) {
     <>
       <Header isLogedIn={props.isLogedIn} burgerMenu={props.handleBurgerMenu} />
       <SearchForm
+        disabled={disabled}
         onSubmit={onSubmit}
-        checked={checked}
-        handleCheck={handleCheck}
+        checked={props.checked}
+        handleCheck={props.handleCheck}
       ></SearchForm>
 
       <div className="movies">
         <span className="movies__text">{props.movieText}</span>
-        <Preloader loading={props.loading}></Preloader>
-
-        {props.movies.length !== 0 ? (
-          rendered.map((card) => {
+        {props.loading ? (
+          <Preloader loading={props.loading}></Preloader>
+        ) : props.movies.length !== 0 ? (
+          rendered.slice(0, count + more).map((card) => {
             return (
               <MoviesCard
                 card={card}

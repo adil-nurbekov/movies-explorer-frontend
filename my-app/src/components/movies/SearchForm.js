@@ -54,6 +54,11 @@ function SearchForm(props) {
                 ? props.handleCheck
                 : props.savedHandleCheck
             }
+            disabled={
+              location.pathname === "/movies"
+                ? props.disabled
+                : props.savedDisabled
+            }
           ></input>
           <p className="search__text">Короткометражки</p>
         </div>
