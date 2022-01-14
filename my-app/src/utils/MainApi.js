@@ -1,3 +1,5 @@
+import { SERVER_URL } from "./constants";
+
 // CHECK RESPONSE FROM SERVER METHOD
 const checkResponseStatus = (res) => {
   if (res.ok) {
@@ -7,7 +9,6 @@ const checkResponseStatus = (res) => {
 };
 //
 
-const SERVER_URL = "https://api.kinopokaz.nomoredomains.work";
 // const SERVER_URL = "http://localhost:5000";
 
 // REGISTARATION METHOD

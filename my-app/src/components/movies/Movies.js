@@ -8,13 +8,16 @@ import Footer from "../Footer";
 import Preloader from "../Preloader";
 import "./Movies.css";
 
+import { FILTER_DURATION, RENDER_MOVIE } from "../../utils/constants";
+
 function Movies(props) {
-  const [rendered, setRendered] = useState([]);
-  const [count, setCount] = useState(7);
+  // const [rendered, setRendered] = useState([]);
+  const [count, setCount] = useState(RENDER_MOVIE);
   const [more, setMore] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [check, setCheck] = useState(false);
 
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
 
   const loadMore = () => {
     setMore(more + count);
@@ -31,30 +34,20 @@ function Movies(props) {
     props.deleteMovie(card);
   };
 
-  useEffect(() => {
-    if (props.movies.length > count + more) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-    if (props.movies.length !== 0) {
-      setDisabled(false);
-    }
-    props.checked
-      ? setRendered(props.movies.filter((movie) => movie.duration <= 40))
-      : setRendered(props.movies);
-  }, [props.checked, props.movies, more, count]);
+  const filterShortFilm = (moviesToFilter) =>
+    moviesToFilter.filter((item) => item.duration < FILTER_DURATION);
 
-  // useEffect(() => {
-  //   if (location === "/movies") {
-  //     setRendered(props.movies.slice(0, count + more));
-  //     if (props.movies.length <= count + more) {
-  //       setIsActive(false);
-  //     } else {
-  //       setIsActive(true);
-  //     }
-  //   }
-  // }, [props.movies, count, more]);
+  const HandleCheck = () => {
+    localStorage.setItem("check", !check);
+    setCheck(!check);
+  };
+
+  useEffect(() => {
+    // setCheck(localStorage.getItem("check"));
+    props.movies.length > count + more ? setIsActive(true) : setIsActive(false);
+
+    props.movies.length === 0 ? setDisabled(true) : setDisabled(false);
+  }, [props.movies, more, count, check]);
 
   const duration = (num) => {
     const hours = Math.floor(num / 60);
@@ -70,15 +63,33 @@ function Movies(props) {
         disabled={disabled}
         onSubmit={onSubmit}
         checked={props.checked}
-        handleCheck={props.handleCheck}
+        handleCheck={HandleCheck}
       ></SearchForm>
 
       <div className="movies">
         <span className="movies__text">{props.movieText}</span>
         {props.loading ? (
           <Preloader loading={props.loading}></Preloader>
-        ) : props.movies.length !== 0 ? (
-          rendered.slice(0, count + more).map((card) => {
+        ) : check ? (
+          filterShortFilm(props.movies)
+            .slice(0, count + more)
+            .map((card) => {
+              return (
+                <MoviesCard
+                  card={card}
+                  name={card.nameRU}
+                  duration={duration(card.duration)}
+                  image={`https://api.nomoreparties.co${card.image.url}`}
+                  key={card.id}
+                  saveMovie={saveMovie}
+                  deleteMovie={deleteMovie}
+                  loading={props.loading}
+                  trailer={card.trailerLink}
+                ></MoviesCard>
+              );
+            })
+        ) : (
+          props.movies.slice(0, count + more).map((card) => {
             return (
               <MoviesCard
                 card={card}
@@ -93,8 +104,6 @@ function Movies(props) {
               ></MoviesCard>
             );
           })
-        ) : (
-          <span></span>
         )}
 
         <button

@@ -15,6 +15,14 @@ import { AllMovies } from "../context/AllMovies";
 import * as MainApi from "../utils/MainApi";
 import * as MovieApi from "../utils/MovieApi";
 import PagePreloader from "./PagePreloader";
+import {
+  ERROR_401,
+  ERROR_409,
+  ERROR_ELSE,
+  CHANGE_SUCCESS,
+  ERROR_SERVER,
+  NOT_FOUND,
+} from "../utils/constants";
 
 function App() {
   const navigate = useNavigate();
@@ -64,9 +72,9 @@ function App() {
       })
       .catch((err) => {
         if (err === 401) {
-          setStatusText("Неправильный email или пароль");
+          setStatusText(ERROR_401);
         } else {
-          setStatusText("Что-то пошло не так");
+          setStatusText(ERROR_ELSE);
         }
         setTimeout(() => {
           setStatusText("");
@@ -86,9 +94,9 @@ function App() {
       })
       .catch((err) => {
         if (err === 409) {
-          setStatusText("Такой email уже зарегистрирован");
+          setStatusText(ERROR_409);
         } else {
-          setStatusText("Что-то пошло не так");
+          setStatusText(ERROR_ELSE);
         }
         setTimeout(() => {
           setStatusText("");
@@ -103,16 +111,16 @@ function App() {
     MainApi.changeUsersInfo(name, email)
       .then((res) => {
         setCurrentUser(res);
-        setStatusText("Ваши данные были изменены");
+        setStatusText(CHANGE_SUCCESS);
         setTimeout(() => {
           setStatusText("");
         }, 2000);
       })
       .catch((err) => {
         if (err === 409) {
-          setStatusText("Такой email уже зарегистрирован");
+          setStatusText(ERROR_409);
         } else {
-          setStatusText("Что-то пошло не так");
+          setStatusText(ERROR_ELSE);
         }
         setTimeout(() => {
           setStatusText("");
@@ -131,9 +139,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-        setMovieText(
-          "«Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз»."
-        );
+        setMovieText(ERROR_SERVER);
         setTimeout(() => {
           setMovieText("");
         }, 2000);
@@ -145,13 +151,12 @@ function App() {
     MainApi.getSavedMovies()
       .then((savedMovies) => {
         setSavedMovies(savedMovies);
+        console.log(savedMovies);
         localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
       })
       .catch((err) => {
         console.log(err);
-        setMovieText(
-          "«Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз»."
-        );
+        setMovieText(ERROR_SERVER);
         setTimeout(() => {
           setMovieText("");
         }, 2000);
@@ -161,11 +166,15 @@ function App() {
   // SAVE MOVIE
   const saveMovie = (card) => {
     MainApi.saveMovie(card)
-      .then((added) => {
-        setSavedMovies([...savedMovies, { ...added }]);
+      .then(() => {
+        getSavedMovies();
       })
       .catch((err) => {
+        setMovieText(ERROR_ELSE);
         console.log(err);
+        setTimeout(() => {
+          setMovieText("");
+        }, 2000);
       });
   };
   //
@@ -174,11 +183,16 @@ function App() {
   const deleteMovie = (movie) => {
     const id = savedMovies.find((card) => card.movieId === movie.id);
     MainApi.deleteSavedMovie(id._id)
-      .then((deleted) => {
-        setSavedMovies(savedMovies.filter((item) => item._id !== deleted._id));
+      .then(() => {
+        getSavedMovies();
+        // setSavedMovies(savedMovies.filter((item) => item._id !== deleted._id));
       })
       .catch((err) => {
+        setMovieText(ERROR_ELSE);
         console.log(err);
+        setTimeout(() => {
+          setMovieText("");
+        }, 2000);
       });
   };
   //
@@ -186,11 +200,16 @@ function App() {
   // DELETE MOVIE FROM SAVED MOVIE PAGE
   const deleteCard = (card) => {
     MainApi.deleteSavedMovie(card._id)
-      .then((deleted) => {
-        setSavedMovies(savedMovies.filter((item) => item._id !== deleted._id));
+      .then(() => {
+        getSavedMovies();
+        // setSavedMovies(savedMovies.filter((item) => item._id !== deleted._id));
       })
       .catch((err) => {
+        setMovieText(ERROR_ELSE);
         console.log(err);
+        setTimeout(() => {
+          setMovieText("");
+        }, 2000);
       });
   };
   //
@@ -198,52 +217,30 @@ function App() {
   // HANDLE SEARCH BUTTON
   const findMovies = (input) => {
     setLoading(true);
+
+    localStorage.setItem("input", input);
+
+    const moviesArray = movies.filter((m) =>
+      JSON.stringify(m.nameRU || m.nameEN)
+        .toLowerCase()
+        .includes(input.toLowerCase())
+    );
+    if (moviesArray.length === 0) {
+      setMovieText(NOT_FOUND);
+      localStorage.setItem("findedMovies", JSON.stringify(moviesArray));
+      setRenderMovies([]);
+    } else {
+      setMovieText("");
+      localStorage.setItem("findedMovies", JSON.stringify(moviesArray));
+      setRenderMovies(moviesArray);
+      console.log(moviesArray);
+    }
+
+    setLoading(false);
+
     setTimeout(() => {
-      const moviesArray = movies.filter((m) =>
-        JSON.stringify(m.nameRU || m.nameEN)
-          .toLowerCase()
-          .includes(input.toLowerCase())
-      );
-      if (moviesArray.length === 0) {
-        setRenderMovies(moviesArray);
-        setMovieText("Ничего не найдено");
-      } else {
-        setRenderMovies(moviesArray);
-        setMovieText("");
-      }
-      setLoading(false);
-    }, 600);
-  };
-
-  // HANDLE SEARCH BUTTON FROM SAVED MOVIE PAGE
-  const findSavedMovies = (inputSaved) => {
-    setLoading(true);
-    setTimeout(() => {
-      const savedMoviesArray = savedMovies.filter((m) =>
-        JSON.stringify(m.nameRU || m.nameEN)
-          .toLowerCase()
-          .includes(inputSaved.toLowerCase())
-      );
-      if (savedMoviesArray.length === 0) {
-        setSavedMovies(savedMoviesArray);
-        setMovieText("Ничего не найдено");
-      } else {
-        setSavedMovies(savedMoviesArray);
-        setMovieText("");
-      }
-      setLoading(false);
-    }, 600);
-  };
-  //
-
-  const savedHandleCheck = () => {
-    setSavedChecked(!savedChecked);
-    localStorage.setItem("savedCheck", !savedChecked);
-  };
-
-  const handleCheck = () => {
-    setChecked(!checked);
-    localStorage.setItem("check", !checked);
+      setMovieText("");
+    }, 1000);
   };
 
   // SIGN OUT METHOD
@@ -273,14 +270,11 @@ function App() {
       getUsersInfo();
 
       setIsLoaded(true);
-      if (localStorage.getItem("allMovies")) {
-        setMovies(JSON.parse(localStorage.getItem("allMovies")));
-      }
+
       getAllMovies();
-      if (localStorage.getItem("savedMovies")) {
-        setSavedMovies(JSON.parse(localStorage.getItem("savedMovies")));
-      }
+
       getSavedMovies();
+      setRenderMovies(JSON.parse(localStorage.getItem("findedMovies")));
     }
   }, [isLoggedIn]);
 
@@ -332,12 +326,11 @@ function App() {
                         savedMovies={savedMovies}
                         handleBurgerMenu={handleBurgerMenu}
                         deleteCard={deleteCard}
-                        handleSubmit={findSavedMovies}
                         loading={loading}
                         isLogedIn={isLoggedIn}
                         movieText={movieText}
-                        savedHandleCheck={savedHandleCheck}
                         savedChecked={savedChecked}
+                        setSavedMovies={setSavedMovies}
                       />
                     ) : (
                       <Navigate to={"/"} />
@@ -358,7 +351,6 @@ function App() {
                         loading={loading}
                         movieText={movieText}
                         isLogedIn={isLoggedIn}
-                        handleCheck={handleCheck}
                         checked={checked}
                       />
                     ) : (

@@ -1,3 +1,4 @@
+import { MOVIES_SERVER_URL } from "./constants";
 const checkResponseStatus = (res) => {
   if (res.ok) {
     return res.json();
@@ -6,7 +7,7 @@ const checkResponseStatus = (res) => {
 };
 
 export const getAllMovies = () => {
-  return fetch("https://api.nomoreparties.co/beatfilm-movies", {
+  return fetch(MOVIES_SERVER_URL, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
