@@ -38,12 +38,12 @@ export const login = (email, password) => {
 //
 
 // CHECK TOKEN METHOD
-export const checkToken = (token) => {
+export const checkToken = () => {
   return fetch(`${SERVER_URL}/users/me`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   }).then((res) => checkResponseStatus(res));
 };

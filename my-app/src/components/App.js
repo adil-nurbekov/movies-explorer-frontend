@@ -35,7 +35,7 @@ function App() {
   const [isLoggedIn, setIsLogedIn] = useState(false);
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
   const [statusText, setStatusText] = useState("");
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   const [savedChecked, setSavedChecked] = useState(false);
 
@@ -252,9 +252,8 @@ function App() {
 
   // CHECK TOKEN METHOD
   const checkToken = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      MainApi.checkToken(token)
+    if (localStorage.getItem("token")) {
+      MainApi.checkToken()
         .then(() => {
           setIsLogedIn(true);
         })
@@ -274,7 +273,9 @@ function App() {
       getAllMovies();
 
       getSavedMovies();
-      setRenderMovies(JSON.parse(localStorage.getItem("findedMovies")));
+      if (JSON.parse(localStorage.getItem("findedMovies")) !== null)
+        setRenderMovies(JSON.parse(localStorage.getItem("findedMovies")));
+      setRenderMovies(renderMovies);
     }
   }, [isLoggedIn]);
 
