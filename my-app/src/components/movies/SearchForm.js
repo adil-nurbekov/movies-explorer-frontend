@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import loop from "../../images/loop.svg";
 import "./SearchForm.css";
 
 function SearchForm(props) {
+  const location = useLocation();
   const [input, setInput] = useState("");
+  const [inputSaved, setInputSaved] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     props.onSubmit(input);
   };
+
+  useEffect(() => {
+    setInput(localStorage.getItem("input"));
+    setInputSaved(localStorage.getItem("inputSaved"));
+  }, []);
 
   return (
     <div className="search">
@@ -19,9 +27,12 @@ function SearchForm(props) {
           type="search"
           placeholder="Фильмы"
           required
-          value={input}
+          value={
+            location.pathname === "/movies" ? input || "" : inputSaved || ""
+          }
           onChange={(e) => {
             setInput(e.target.value);
+            setInputSaved(e.target.value);
           }}
         ></input>
         <button className="search__button" type="submit">
@@ -30,7 +41,25 @@ function SearchForm(props) {
         </button>
         <div className="search__divader"></div>
         <div className="search__checkbox-wrapper">
-          <input className="search__checkbox" type="checkbox"></input>
+          <input
+            className="search__checkbox"
+            type="checkbox"
+            defaultChecked={
+              location.pathname === "/movies"
+                ? props.checked
+                : props.savedChecked
+            }
+            onChange={
+              location.pathname === "/movies"
+                ? props.handleCheck
+                : props.savedHandleCheck
+            }
+            disabled={
+              location.pathname === "/movies"
+                ? props.disabled
+                : props.savedDisabled
+            }
+          ></input>
           <p className="search__text">Короткометражки</p>
         </div>
       </form>

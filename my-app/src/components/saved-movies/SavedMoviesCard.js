@@ -18,11 +18,14 @@ function SavedMoviesCard(props) {
         </div>
         <div className="saved-card__img-wrapper">
           {" "}
-          <img
-            className="saved-card__img"
-            src={props.image}
-            alt="фото фильма"
-          ></img>
+          <a href={props.trailer} target="_blank" rel="noreferrer">
+            {" "}
+            <img
+              className="saved-card__img"
+              src={props.image}
+              alt="фото фильма"
+            ></img>
+          </a>
         </div>
       </div>
     </>

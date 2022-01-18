@@ -4,6 +4,25 @@
     padding-right: 70px;
     padding-bottom: 80px;
 }
+.movies__text{
+    margin: 0 auto 20px;
+    line-height: 15px;
+
+
+font-family: Inter, Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: 500;
+font-size: 25px;
+line-height: 15px;
+display: flex;
+align-items: center;
+text-align: center;
+justify-content:center;
+color: #000000;
+}
+.movies__else_dis{
+    display:none
+}
 .movies__else{
     width: 100%;
     max-width: 320px;

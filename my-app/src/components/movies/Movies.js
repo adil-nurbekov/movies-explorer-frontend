@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 import Header from "../Header";
 import SearchForm from "./SearchForm";
 import MoviesCard from "./MoviesCard";
 import Footer from "../Footer";
 
-import { AllMovies } from "../../context/AllMovies";
 import Preloader from "../Preloader";
 import "./Movies.css";
 
+import { FILTER_DURATION, RENDER_MOVIE } from "../../utils/constants";
+
 function Movies(props) {
-  const movies = React.useContext(AllMovies);
+  // const [rendered, setRendered] = useState([]);
+  const [count, setCount] = useState(RENDER_MOVIE);
+  const [more, setMore] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+  const [check, setCheck] = useState(false);
+
+  const [disabled, setDisabled] = useState(false);
+
+  const loadMore = () => {
+    setMore(more + count);
+  };
 
   const onSubmit = (input) => {
     props.findMovies(input);
@@ -22,13 +34,20 @@ function Movies(props) {
     props.deleteMovie(card);
   };
 
-  // const [input, setInput] = useState([]);
+  const filterShortFilm = (moviesToFilter) =>
+    moviesToFilter.filter((item) => item.duration < FILTER_DURATION);
 
-  // useEffect(() => {
-  //   MovieApi.getAllMovies().then((movies) => {
-  //     setMovie(movies);
-  //   });
-  // }, []);
+  const HandleCheck = () => {
+    localStorage.setItem("check", !check);
+    setCheck(!check);
+  };
+
+  useEffect(() => {
+    // setCheck(localStorage.getItem("check"));
+    props.movies.length > count + more ? setIsActive(true) : setIsActive(false);
+
+    props.movies.length === 0 ? setDisabled(true) : setDisabled(false);
+  }, [props.movies, more, count, check]);
 
   const duration = (num) => {
     const hours = Math.floor(num / 60);
@@ -39,27 +58,60 @@ function Movies(props) {
   };
   return (
     <>
-      <Header isMain={false} burgerMenu={props.handleBurgerMenu} />
-      <SearchForm onSubmit={onSubmit}></SearchForm>
+      <Header isLogedIn={props.isLogedIn} burgerMenu={props.handleBurgerMenu} />
+      <SearchForm
+        disabled={disabled}
+        onSubmit={onSubmit}
+        checked={props.checked}
+        handleCheck={HandleCheck}
+      ></SearchForm>
 
       <div className="movies">
-        <Preloader loading={props.loading}></Preloader>
-        {movies.slice(0, 7).map((card) => {
-          return (
-            <MoviesCard
-              card={card}
-              name={card.nameRU}
-              duration={duration(card.duration)}
-              image={card.image}
-              key={card.movieId}
-              saveMovie={saveMovie}
-              deleteMovie={deleteMovie}
-              loading={props.loading}
-            ></MoviesCard>
-          );
-        })}
+        <span className="movies__text">{props.movieText}</span>
+        {props.loading ? (
+          <Preloader loading={props.loading}></Preloader>
+        ) : check ? (
+          filterShortFilm(props.movies)
+            .slice(0, count + more)
+            .map((card) => {
+              return (
+                <MoviesCard
+                  card={card}
+                  name={card.nameRU}
+                  duration={duration(card.duration)}
+                  image={`https://api.nomoreparties.co${card.image.url}`}
+                  key={card.id}
+                  saveMovie={saveMovie}
+                  deleteMovie={deleteMovie}
+                  loading={props.loading}
+                  trailer={card.trailerLink}
+                ></MoviesCard>
+              );
+            })
+        ) : (
+          props.movies.slice(0, count + more).map((card) => {
+            return (
+              <MoviesCard
+                card={card}
+                name={card.nameRU}
+                duration={duration(card.duration)}
+                image={`https://api.nomoreparties.co${card.image.url}`}
+                key={card.id}
+                saveMovie={saveMovie}
+                deleteMovie={deleteMovie}
+                loading={props.loading}
+                trailer={card.trailerLink}
+              ></MoviesCard>
+            );
+          })
+        )}
 
-        <button className="movies__else">Еще</button>
+        <button
+          className={isActive ? "movies__else" : "movies__else_dis"}
+          onClick={loadMore}
+        >
+          Еще
+        </button>
       </div>
       <Footer></Footer>
     </>
